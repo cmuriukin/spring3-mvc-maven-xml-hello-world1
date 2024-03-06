@@ -27,10 +27,14 @@
 # # #
 # # # 
 name: Java CI with Maven
+
 on: push
+
 jobs:
   build:
+
     runs-on: ubuntu-latest
+
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK 8
@@ -44,7 +48,7 @@ jobs:
       run: mvn package
     - name: Check for Maven artifacts
       run: |
-        if [ ! -f target/*.jar ]; then
+        if [ ! -f ${{ github.workspace }}/target/*.jar ]; then
           echo "No artifacts found. Exiting..."
           exit 1
         fi
@@ -53,4 +57,5 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: maven-artifacts
-        path: target/*.jar  
+        path: ${{ github.workspace }}/target/*.jar
+
