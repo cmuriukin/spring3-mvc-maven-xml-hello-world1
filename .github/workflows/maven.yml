@@ -50,7 +50,11 @@ jobs:
             sudo apt-get update
             sudo apt-get install -y unzip
             mkdir -p temp_artifacts
-            wget -q -O temp_artifacts/maven-artifacts.zip ${{ steps.upload.outputs.artifacts_location }}/maven-artifacts.zip
+            wget -q -O temp_artifacts/maven-artifacts.zip ${{ steps.<upload-step-id>.outputs.artifacts_location }}/maven-artifacts.zip
+            if [ ! -f temp_artifacts/maven-artifacts.zip ]; then
+              echo "Failed to download artifact"
+              exit 1
+            fi
             unzip -q temp_artifacts/maven-artifacts.zip -d temp_artifacts/
             cp maven-artifacts/*.war tomcat:/bitnami/tomcat/webapps/*.war
 
