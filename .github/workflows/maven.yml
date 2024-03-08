@@ -50,7 +50,7 @@ jobs:
             sudo apt-get update
             sudo apt-get install -y unzip
             mkdir -p temp_artifacts
-            wget -q -O temp_artifacts/maven-artifacts.tar.gz ${{ steps.<upload-step-id>.outputs.artifacts_location }}/maven-artifacts.tar.gz
+            wget -q -O temp_artifacts/maven-artifacts.tar.gz ${{ steps.upload.outputs.artifacts_location }}/maven-artifacts.tar.gz
             if [ ! -f temp_artifacts/maven-artifacts.tar.gz ]; then
               echo "Failed to download artifact"
               exit 1
