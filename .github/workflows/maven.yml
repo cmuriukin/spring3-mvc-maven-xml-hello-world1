@@ -33,6 +33,7 @@ jobs:
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=my-maven-project -Dsonar.projectName='my-maven-project'
       - name: Archive Maven artifacts
+        id: upload
         uses: actions/upload-artifact@v2
         with:
           name: maven-artifacts
@@ -46,5 +47,8 @@ jobs:
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           script: |
             #sudo systemctl restart tomcat
+            mkdir -p temp_artifacts
+            wget -q -O temp_artifacts/maven-artifacts.zip ${{ steps.upload.outputs.artifacts_location }}/maven-artifacts.zip
+            unzip -q temp_artifacts/maven-artifacts.zip -d temp_artifacts/
             cp maven-artifacts/*.war tomcat:/bitnami/tomcat/webapps/*.war
 
