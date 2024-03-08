@@ -63,7 +63,6 @@ jobs:
             sudo systemctl restart tomcat
             scp temp_artifacts/deployed.war ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }}:tomcat:/bitnami/tomcat/webapps/
 
-
       # - name: Deploy to Tomcat on AWS EC2
       #   uses: appleboy/ssh-action@master
       #   with:
