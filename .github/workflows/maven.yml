@@ -47,6 +47,8 @@ jobs:
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           script: |
             #sudo systemctl restart tomcat
+            sudo apt-get update
+            sudo apt-get install -y unzip
             mkdir -p temp_artifacts
             wget -q -O temp_artifacts/maven-artifacts.zip ${{ steps.upload.outputs.artifacts_location }}/maven-artifacts.zip
             unzip -q temp_artifacts/maven-artifacts.zip -d temp_artifacts/
