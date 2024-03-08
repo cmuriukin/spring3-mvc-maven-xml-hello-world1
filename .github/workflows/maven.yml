@@ -45,6 +45,6 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           script: |
-            sudo systemctl restart tomcat
+            #sudo systemctl restart tomcat
             cp maven-artifacts/*.war tomcat:/bitnami/tomcat/webapps/*.war
 
