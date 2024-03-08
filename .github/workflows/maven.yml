@@ -47,8 +47,12 @@ jobs:
             echo "Failed to download artifact"
             exit 1
           fi
+          ls -l temp_artifacts
           tar -xzvf temp_artifacts/maven-artifacts.tar.gz -C temp_artifacts/
+          ls -l temp_artifacts
           mv temp_artifacts/*.war temp_artifacts/deployed.war
+          ls -l temp_artifacts
+          
       - name: Deploy to Tomcat on AWS EC2
         uses: appleboy/ssh-action@master
         with:
