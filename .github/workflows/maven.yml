@@ -59,7 +59,7 @@ jobs:
         key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
         script: |
           # Copy the .war file to the Bitnami Tomcat container
-          docker cp /home/ubuntu/actions-runner/_work/spring3-mvc-maven-xml-hello-world1/spring3-mvc-maven-xml-hello-world1/target/spring3-mvc-maven-xml-hello-world-1.3.war bitnami_tomcat_container:/bitnami/tomcat/webapps/
+          docker cp /home/ubuntu/spring3-mvc-maven-xml-hello-world-1.3.war tomcat:/bitnami/tomcat/webapps/
     
     
             
