@@ -46,3 +46,6 @@ jobs:
           -T deployed.war \
           'http://13.40.46.20:8080/manager/text/deploy?path=/github_action_spring&update=true'
 
+
+
+
