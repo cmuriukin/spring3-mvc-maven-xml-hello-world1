@@ -38,13 +38,24 @@ jobs:
         with:
           name: maven-artifacts
           path: '**/*.war' 
-
-      - name: Deploy to Tomcat Container
-        run: |
-          wget -q -O deployed.war "${{ steps.upload.outputs.artifact_url }}"
-          curl -v -u ${{ secrets.TOMCAT_USERNAME }}:${{ secrets.TOMCAT_PASSWORD }} \
-          -T deployed.war \
-          'http://13.40.46.20:8080/manager/text/deploy?path=/github_action_spring&update=true'
+      - name: Download and Deploy Artifact
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+          script: |
+            # Create a directory for artifact
+            mkdir -p temp_artifacts
+            
+            # Download the artifact from GitHub Actions
+            wget -q -O temp_artifacts/maven-artifacts.tar.gz ${{ steps.upload.outputs.artifact_url }}
+            
+            # Unpack the artifact
+            tar -xzvf temp_artifacts/maven-artifacts.tar.gz -C temp_artifacts/
+            
+            # Copy the .war file to the Bitnami Tomcat container
+            docker cp temp_artifacts/*.war bitnami:/bitnami/tomcat/webapps/
 
 
 
