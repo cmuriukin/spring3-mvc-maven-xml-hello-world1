@@ -50,10 +50,13 @@ jobs:
             mkdir -p temp_artifacts
             
             # Download the artifact from GitHub Actions
-            wget -q -O temp_artifacts/maven-artifacts.tar.gz "https://github.com/cmuriukin/spring3-mvc-maven-xml-hello-world1/actions/runs/8214275694/artifacts/1311643086"
+            wget -q -O temp_artifacts/maven-artifacts.tar.gz "${{ steps.upload.outputs.artifact_url }}"
             
             # Check if the file is downloaded successfully
             ls -l temp_artifacts
+            
+            # List the contents of the downloaded tar.gz file
+            tar -tzvf temp_artifacts/maven-artifacts.tar.gz
             
             # Unpack the artifact
             tar -xzvf temp_artifacts/maven-artifacts.tar.gz -C temp_artifacts/
