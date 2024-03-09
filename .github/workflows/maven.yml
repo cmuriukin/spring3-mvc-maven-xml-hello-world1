@@ -39,10 +39,11 @@ jobs:
           name: maven-artifacts
           path: '**/*.war' 
 
+
       - name: Download and Extract Artifact
         run: |
           mkdir -p temp_artifacts
-          wget -q -O temp_artifacts/maven-artifacts.tar.gz ${{ steps.upload.outputs.artifacts_location }}/maven-artifacts.tar.gz
+          wget -q -O temp_artifacts/maven-artifacts.tar.gz ${{ steps.upload.outputs.artifacts_location }}
           if [ ! -f temp_artifacts/maven-artifacts.tar.gz ]; then
             echo "Failed to download artifact"
             exit 1
@@ -52,17 +53,20 @@ jobs:
           ls -l temp_artifacts
           mv temp_artifacts/*.war temp_artifacts/deployed.war
           ls -l temp_artifacts
-          
-      - name: Deploy to Tomcat on AWS EC2
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USERNAME }}
-          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
-          script: |
-            sudo systemctl restart tomcat
-            scp temp_artifacts/deployed.war ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }}:tomcat:/bitnami/tomcat/webapps/
+      
+      - name: Deploy to Tomcat Container
+        env:
+          DOCKER_HOST: ${{ secrets.EC2_HOST }}
+        run: |
+          docker cp temp_artifacts/deployed.war tomcat:/bitnami/tomcat/webapps/deployed.war
+          docker restart your-tomcat-container
 
+     
+      
+           
+      
+      ########################################################################################################3
+      
       # - name: Deploy to Tomcat on AWS EC2
       #   uses: appleboy/ssh-action@master
       #   with:
