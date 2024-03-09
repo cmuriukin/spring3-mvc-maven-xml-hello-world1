@@ -38,6 +38,7 @@ jobs:
         with:
           name: maven-artifacts
           path: '**/*.war' 
+
       - name: Download and Deploy Artifact
         uses: appleboy/ssh-action@master
         with:
@@ -49,13 +50,44 @@ jobs:
             mkdir -p temp_artifacts
             
             # Download the artifact from GitHub Actions
-            wget -q -O temp_artifacts/maven-artifacts.tar.gz ${{ steps.upload.outputs.artifact_url }}
+            wget -q -O temp_artifacts/maven-artifacts.tar.gz "${{ steps.upload.outputs.artifact_url }}"
+            
+            # Check if the file is downloaded successfully
+            ls -l temp_artifacts
             
             # Unpack the artifact
             tar -xzvf temp_artifacts/maven-artifacts.tar.gz -C temp_artifacts/
             
+            # Check if the files are extracted successfully
+            ls -l temp_artifacts
+            
             # Copy the .war file to the Bitnami Tomcat container
-            docker cp temp_artifacts/*.war bitnami:/bitnami/tomcat/webapps/
+            docker cp temp_artifacts/*.war bitnami_tomcat_container:/bitnami/tomcat/webapps/
+
+      
+      
+      
+      
+      
+      
+      # - name: Download and Deploy Artifact
+      #   uses: appleboy/ssh-action@master
+      #   with:
+      #     host: ${{ secrets.EC2_HOST }}
+      #     username: ${{ secrets.EC2_USERNAME }}
+      #     key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+      #     script: |
+      #       # Create a directory for artifact
+      #       mkdir -p temp_artifacts
+            
+      #       # Download the artifact from GitHub Actions
+      #       wget -q -O temp_artifacts/maven-artifacts.tar.gz ${{ steps.upload.outputs.artifact_url }}
+            
+      #       # Unpack the artifact
+      #       tar -xzvf temp_artifacts/maven-artifacts.tar.gz -C temp_artifacts/
+            
+      #       # Copy the .war file to the Bitnami Tomcat container
+      #       docker cp temp_artifacts/*.war bitnami:/bitnami/tomcat/webapps/
 
 
 
