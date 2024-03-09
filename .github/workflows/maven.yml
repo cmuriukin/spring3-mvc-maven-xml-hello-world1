@@ -50,20 +50,19 @@ jobs:
       #   # run: mvn package
       # # - name: tomcat deploy
       # #   run: curl -v -u  ${{ secrets.TOMCAT_USERNAME }}:${{ secrets.TOMCAT_PASSWORD }} -T /home/ubuntu/actions-runner/_work/spring3-mvc-maven-xml-hello-world/spring3-mvc-maven-xml-hello-world/target/spring3-mvc-maven-xml-hello-world-1.3.war
-
-      - name: Download and Deploy Artifact
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USERNAME }}
-          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
-          script: |
+    
+    - name: Download and Deploy Artifact
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USERNAME }}
+        key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+        script: |
+          # Copy the .war file to the Bitnami Tomcat container
+          docker cp /home/ubuntu/actions-runner/_work/spring3-mvc-maven-xml-hello-world1/spring3-mvc-maven-xml-hello-world1/target/spring3-mvc-maven-xml-hello-world-1.3.war bitnami_tomcat_container:/bitnami/tomcat/webapps/
+    
+    
             
-            # Copy the .war file to the Bitnami Tomcat container
-            cd /home/ubuntu/actions-runner/_work/spring3-mvc-maven-xml-hello-world1/spring3-mvc-maven-xml-hello-world1/target
-            docker cp 18.171.188.113/spring3-mvc-maven-xml-hello-world-1.3.war 18.171.188.113:bitnami:/bitnami/tomcat/webapps/
-
-        
       
       # - name: Download and Deploy Artifact
       #   uses: appleboy/ssh-action@master
